@@ -24,16 +24,16 @@ async def periodic_sender():
     while not bot.is_closed():
         try:
             channel = bot.get_channel(CHANNEL_ID) or await bot.fetch_channel(CHANNEL_ID)
+            # 起動直後も送信
             await channel.send("こんにちは")
         except nextcord.Forbidden:
-            # アクセス権限がない場合は 10 分待って再試行
             await asyncio.sleep(600)
             continue
         except Exception:
-            # その他のエラーは 1 分後に再試行
             await asyncio.sleep(60)
             continue
 
+        # 以降は INTERVAL_SECONDS ごとに送信
         await asyncio.sleep(INTERVAL_SECONDS)
 
 bot.loop.create_task(periodic_sender())
