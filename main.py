@@ -3,7 +3,12 @@ import nextcord
 from nextcord.ext import commands
 from asyncio_throttle.throttler import Throttler
 
-TOKEN = ""
+BOT_TOKEN = os.getenv('DISCORD_TOKEN')
+
+if not BOT_TOKEN:
+    print("トークン入れろ!")
+    exit(1)
+    
 CHANNEL_ID = 1437414209636925543
 INTERVAL_SECONDS = 3 * 60 * 60 + 20 * 60
 
