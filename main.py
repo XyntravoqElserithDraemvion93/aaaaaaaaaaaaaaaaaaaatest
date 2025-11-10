@@ -21,10 +21,20 @@ throttler = Throttler(rate_limit=1, period=INTERVAL_SECONDS)
 
 async def periodic_sender():
     await bot.wait_until_ready()
-    channel = bot.get_channel(CHANNEL_ID) or await bot.fetch_channel(CHANNEL_ID)
     while not bot.is_closed():
-        async with throttler:
+        try:
+            channel = bot.get_channel(CHANNEL_ID) or await bot.fetch_channel(CHANNEL_ID)
             await channel.send("こんにちは")
+        except nextcord.Forbidden:
+            # アクセス権限がない場合は 10 分待って再試行
+            await asyncio.sleep(600)
+            continue
+        except Exception:
+            # その他のエラーは 1 分後に再試行
+            await asyncio.sleep(60)
+            continue
+
+        await asyncio.sleep(INTERVAL_SECONDS)
 
 bot.loop.create_task(periodic_sender())
 
