@@ -5,7 +5,7 @@ import nextcord
 from nextcord.ext import commands
 from asyncio_throttle.throttler import Throttler
 
-CHANNEL_ID = 1427160713507508236
+CHANNEL_ID = 1437414209636925543
 BOT_TOKEN = os.getenv('DISCORD_TOKEN')
 
 if not BOT_TOKEN:
